@@ -51,9 +51,9 @@ const minimatch_1 = __importDefault(__nccwpck_require__(2002));
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const OPENAI_API_KEY = core.getInput("OPENAI_API_KEY");
 const OPENAI_API_MODEL = core.getInput("OPENAI_API_MODEL");
-const octokit = new rest_1.Octokit({ auth: GITHUB_TOKEN });
+const octokit = new rest_1.Octokit({ auth: process.env.GITHUB_TOKEN });
 const openai = new openai_1.default({
-    apiKey: OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
 });
 function getPRDetails() {
     var _a, _b;
@@ -2558,7 +2558,7 @@ const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAg
 // So we use RequestParameters and add method as additional required property.
 const DEFAULTS = {
   method: "GET",
-  baseUrl: "https://api.github.com",
+  baseUrl: process.env['GITHUB_API_URL'] || 'https://api.github.com',
   headers: {
     accept: "application/vnd.github.v3+json",
     "user-agent": userAgent
@@ -19685,7 +19685,7 @@ class OpenAI extends Core.APIClient {
             apiKey,
             organization,
             ...opts,
-            baseURL: opts.baseURL ?? `https://api.openai.com/v1`,
+            baseURL: opts.baseURL ?? process.env.OPENAI_BASE_URL ?? `https://api.openai.com/v1`,
         };
         if (!options.dangerouslyAllowBrowser && Core.isRunningInBrowser()) {
             throw new Errors.OpenAIError("It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n");
